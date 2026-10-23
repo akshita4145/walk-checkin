@@ -38,3 +38,13 @@ Next.js 16.4 (App Router), React 19.3, TypeScript (strict), Tailwind CSS v4. The
 - Path alias `@/*` maps to the repo root.
 - Layouts/pages use Next's global typed route helpers (e.g. `LayoutProps<"/">` in `app/layout.tsx`) rather than hand-written props types.
 - Deployed on Vercel (`.vercel/` is linked); `.env.local` was created by the Vercel CLI (`vercel env pull`).
+
+# Project scope
+@SCOPE.md
+
+# How to work with me
+- I'm learning this stack. Small steps, one feature at a time.
+- Explain the plan in plain English before writing code.
+- No new dependencies without asking.
+- API routes that touch the database use runtime = "nodejs".
+- Store all times in UTC; convert to local time only for display.
