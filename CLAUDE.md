@@ -12,7 +12,8 @@ The walk check-in app is built end to end and deployed (production alias: `https
 - API routes: `POST /api/walks`, `GET /api/walks/[id]` (public status, never returns the walker token), `POST /api/walks/arrive`.
 - Database: one Neon Postgres table, `walks` (`db/schema.sql`), accessed through `lib/db.ts`.
 - `lib/status.ts` holds `getStatus` (home → overdue → walking), computed on request using the database's `now()`; nothing is stored as "overdue".
-- `proxy.ts` checks that a walk exists before `/walk/[token]` and `/f/[id]` render, so unknown links get a real 404 (the pages stream behind `<Suspense>`, which would otherwise send 200).
+- `proxy.ts` checks that a walk exists and hasn't expired before `/walk/[token]` and `/f/[id]` render, so unknown or expired links get a real 404 (the pages stream behind `<Suspense>`, which would otherwise send 200).
+- Retention: `lib/retention.ts` holds the 24-hour window and the purge; `GET /api/cron/purge` runs daily via Vercel Cron and, if `CRON_SECRET` is set, requires it as a bearer token.
 
 ## Commands
 
@@ -55,3 +56,11 @@ Next.js 16.4 (App Router), React 19.3, TypeScript (strict), Tailwind CSS v4. The
 - No new dependencies without asking.
 - API routes that touch the database run on the Node.js runtime (never Edge). With Cache Components this is the default, and the docs say not to export `runtime` at all (including `runtime = "nodejs"`), so leave the export out.
 - Store all times in UTC; convert to local time only for display.
+
+# Data & privacy rules
+- Store only nickname + walk times. Never location, destination, phone, email.
+- No analytics, pixels, third-party scripts, or tracking; ask before adding any.
+- No personal data in cookies, localStorage, or logs.
+- Secrets only in env vars; never NEXT_PUBLIC_ for secrets. The browser never talks to the DB: only server code (API routes, server components, `proxy.ts`) queries it.
+- API responses return only needed fields; never return walker_token.
+- Walks expire 24 hours after `started_at` (`WALK_TTL_HOURS` in `lib/retention.ts`; the privacy note on `/` says 24 hours, so change both together). Every query that reads a walk must filter on that window. Expired rows are purged by `/api/cron/purge` (daily, `vercel.json`) and whenever a new walk starts.
