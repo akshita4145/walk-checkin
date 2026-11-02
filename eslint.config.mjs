@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Third-party Hallmark design skill and its working files (gitignored, not app code):
+    ".claude/**",
+    ".agents/**",
+    ".hallmark/**",
   ]),
 ]);
 
