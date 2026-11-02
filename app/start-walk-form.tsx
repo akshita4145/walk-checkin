@@ -39,11 +39,12 @@ export default function StartWalkForm() {
   return (
     <form onSubmit={onSubmit} className="space-y-4">
       <label className="block">
-        <span className="text-sm text-foreground/60">Your name</span>
+        <span className="text-sm text-foreground/60">First name or nickname</span>
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
-          maxLength={50}
+          maxLength={20}
+          autoComplete="off"
           required
           className="mt-1 w-full rounded-lg border border-foreground/20 bg-background p-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
         />

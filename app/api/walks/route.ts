@@ -13,8 +13,8 @@ export async function POST(request: Request) {
   const { name, minutes } = (body ?? {}) as { name?: unknown; minutes?: unknown };
   const trimmedName = typeof name === "string" ? name.trim() : "";
 
-  if (trimmedName.length < 1 || trimmedName.length > 50) {
-    return Response.json({ error: "name must be 1-50 characters" }, { status: 400 });
+  if (trimmedName.length < 1 || trimmedName.length > 20) {
+    return Response.json({ error: "name must be 1-20 characters" }, { status: 400 });
   }
   if (typeof minutes !== "number" || !Number.isInteger(minutes) || minutes < 1 || minutes > 720) {
     return Response.json({ error: "minutes must be a whole number from 1 to 720" }, { status: 400 });
