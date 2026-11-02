@@ -1,4 +1,5 @@
 import { sql } from "@/lib/db";
+import { purgeExpiredWalks } from "@/lib/retention";
 
 // Start a walk: body { name, minutes } -> { id, walkerToken }
 export async function POST(request: Request) {
@@ -18,6 +19,9 @@ export async function POST(request: Request) {
   if (typeof minutes !== "number" || !Number.isInteger(minutes) || minutes < 1 || minutes > 720) {
     return Response.json({ error: "minutes must be a whole number from 1 to 720" }, { status: 400 });
   }
+
+  // Housekeeping: sweep expired walks whenever a new one starts.
+  await purgeExpiredWalks();
 
   const id = crypto.randomUUID();
   const walkerToken = crypto.randomUUID();

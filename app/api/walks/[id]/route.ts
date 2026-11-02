@@ -1,5 +1,6 @@
 import { sql } from "@/lib/db";
 import { getStatus } from "@/lib/status";
+import { WALK_TTL_HOURS } from "@/lib/retention";
 
 // Public status for the friend page. Never returns walker_token.
 export async function GET(_request: Request, ctx: RouteContext<"/api/walks/[id]">) {
@@ -10,6 +11,7 @@ export async function GET(_request: Request, ctx: RouteContext<"/api/walks/[id]"
     select name, expected_at, arrived_at, now() as now
     from walks
     where id = ${id}
+      and started_at > now() - make_interval(hours => ${WALK_TTL_HOURS})
   `;
 
   if (rows.length === 0) {

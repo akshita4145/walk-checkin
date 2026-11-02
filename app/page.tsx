@@ -9,6 +9,13 @@ export default function Home() {
         page turns red.
       </p>
       <StartWalkForm />
+      <p className="text-sm text-foreground/60">
+        <strong>Privacy.</strong> This is a demo, so please don&apos;t enter real names or real plans. We store only the
+        nickname you type and the walk times: when it starts, when you&apos;re due, and when you tap &quot;I&apos;m
+        home&quot;. Anyone with your friend link can see your nickname, your due time and whether you&apos;re home.
+        Walks are deleted after 24 hours. Our hosting providers, Vercel and Neon, may keep short-lived technical logs
+        and backups beyond that.
+      </p>
     </main>
   );
 }

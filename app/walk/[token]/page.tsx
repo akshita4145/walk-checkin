@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { sql } from "@/lib/db";
+import { WALK_TTL_HOURS } from "@/lib/retention";
 import WalkerView from "./walker-view";
 
 async function Walk({ params }: { params: PageProps<"/walk/[token]">["params"] }) {
@@ -9,6 +10,7 @@ async function Walk({ params }: { params: PageProps<"/walk/[token]">["params"] }
     select id, name, expected_at, arrived_at
     from walks
     where walker_token = ${token}
+      and started_at > now() - make_interval(hours => ${WALK_TTL_HOURS})
   `;
 
   if (rows.length === 0) {

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { sql } from "@/lib/db";
+import { WALK_TTL_HOURS } from "@/lib/retention";
 
 // The pages stream in behind <Suspense>, so by the time they find out a walk
 // doesn't exist the 200 status is already sent. Checking here, before the page
@@ -11,8 +12,8 @@ export async function proxy(request: NextRequest) {
   try {
     const rows =
       kind === "walk"
-        ? await sql`select 1 from walks where walker_token = ${key}`
-        : await sql`select 1 from walks where id = ${key}`;
+        ? await sql`select 1 from walks where walker_token = ${key} and started_at > now() - make_interval(hours => ${WALK_TTL_HOURS})`
+        : await sql`select 1 from walks where id = ${key} and started_at > now() - make_interval(hours => ${WALK_TTL_HOURS})`;
 
     if (rows.length === 0) {
       // No such route exists, so Next serves its 404 page with a 404 status.

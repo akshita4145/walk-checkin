@@ -1,4 +1,5 @@
 import { sql } from "@/lib/db";
+import { WALK_TTL_HOURS } from "@/lib/retention";
 
 // "I'm home": body { walkerToken } -> { arrivedAt }
 export async function POST(request: Request) {
@@ -19,6 +20,7 @@ export async function POST(request: Request) {
     update walks
     set arrived_at = coalesce(arrived_at, now())
     where walker_token = ${walkerToken}
+      and started_at > now() - make_interval(hours => ${WALK_TTL_HOURS})
     returning arrived_at
   `;
 
