@@ -2,8 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-
-const DURATIONS = [1, 15, 30, 45, 60];
+import { ALLOWED_MINUTES } from "@/lib/demo-limits";
 
 export default function StartWalkForm() {
   const router = useRouter();
@@ -56,7 +55,7 @@ export default function StartWalkForm() {
           onChange={(e) => setMinutes(Number(e.target.value))}
           className="mt-1 w-full rounded-lg border border-foreground/20 bg-background p-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
         >
-          {DURATIONS.map((m) => (
+          {ALLOWED_MINUTES.map((m) => (
             <option key={m} value={m}>
               {m === 1 ? "1 minute (demo)" : `${m} minutes`}
             </option>
