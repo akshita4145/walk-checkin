@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Hallmark design skill (third-party tool, installed per machine; not part of the app)
+/.claude/skills/hallmark/
+/.agents/
+/skills-lock.json
+# Hallmark's own working files (screenshots, records)
+/.hallmark/
