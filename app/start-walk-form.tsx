@@ -1,15 +1,16 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const DURATIONS = [1, 15, 30, 45, 60];
 
 export default function StartWalkForm() {
+  const router = useRouter();
   const [name, setName] = useState("");
   const [minutes, setMinutes] = useState(15);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [links, setLinks] = useState<{ friend: string; walker: string } | null>(null);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -24,33 +25,15 @@ export default function StartWalkForm() {
       const data = await res.json();
       if (!res.ok) {
         setError(data.error ?? "Something went wrong");
+        setBusy(false);
         return;
       }
-      setLinks({
-        friend: `${window.location.origin}/f/${data.id}`,
-        walker: `${window.location.origin}/walk/${data.walkerToken}`,
-      });
+      // Stay "busy" while navigating so the button can't be pressed twice.
+      router.push(`/walk/${data.walkerToken}`);
     } catch {
       setError("Could not reach the server");
-    } finally {
       setBusy(false);
     }
-  }
-
-  if (links) {
-    return (
-      <div className="space-y-4">
-        <p className="font-medium">Walk started.</p>
-        <div>
-          <p className="text-sm text-foreground/60">Send this to your friend</p>
-          <p className="break-all rounded-lg border border-foreground/20 p-3 text-sm">{links.friend}</p>
-        </div>
-        <div>
-          <p className="text-sm text-foreground/60">Keep this for yourself (tap &quot;I&apos;m home&quot; here)</p>
-          <p className="break-all rounded-lg border border-foreground/20 p-3 text-sm">{links.walker}</p>
-        </div>
-      </div>
-    );
   }
 
   return (

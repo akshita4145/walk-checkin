@@ -25,6 +25,17 @@ export default function WalkerView({ token, friendId, name, expectedAt, arrivedA
   const [arrived, setArrived] = useState(arrivedAt);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+
+  async function copyFriendLink() {
+    try {
+      await navigator.clipboard.writeText(`${window.location.origin}/f/${friendId}`);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Clipboard can be blocked; the link is still shown to select by hand.
+    }
+  }
 
   async function imHome() {
     setBusy(true);
@@ -81,6 +92,12 @@ export default function WalkerView({ token, friendId, name, expectedAt, arrivedA
       <div>
         <p className="text-sm text-foreground/60">Your friend&apos;s link</p>
         <p className="break-all rounded-lg border border-foreground/20 p-3 text-sm">{friendLink}</p>
+        <button
+          onClick={copyFriendLink}
+          className="mt-2 w-full rounded-lg border border-foreground/20 p-3 text-sm font-medium"
+        >
+          {copied ? "Copied!" : "Copy link"}
+        </button>
       </div>
     </div>
   );
