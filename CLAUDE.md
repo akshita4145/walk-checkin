@@ -13,6 +13,7 @@ The walk check-in app is built end to end and deployed (production alias: `https
 - Database: one Neon Postgres table, `walks` (`db/schema.sql`), accessed through `lib/db.ts`.
 - `lib/status.ts` holds `getStatus` (home → overdue → walking), computed on request using the database's `now()`; nothing is stored as "overdue".
 - `proxy.ts` checks that a walk exists and hasn't expired before `/walk/[token]` and `/f/[id]` render, so unknown or expired links get a real 404 (the pages stream behind `<Suspense>`, which would otherwise send 200).
+- Demo only, by the owner's choice: every page shows a "Demo only" banner and is `noindex` (`app/layout.tsx`, `app/robots.ts`); only 1, 5 and 15 minute walks are allowed and at most 25 walks can be live (`lib/demo-limits.ts`, enforced in `POST /api/walks`). Don't add real-use features without asking.
 - Retention: `lib/retention.ts` holds the 24-hour window and the purge; `GET /api/cron/purge` runs daily via Vercel Cron and, if `CRON_SECRET` is set, requires it as a bearer token.
 
 ## Commands
