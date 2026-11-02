@@ -29,7 +29,7 @@ async function Walk({ params }: { params: PageProps<"/walk/[token]">["params"] }
 
 export default function WalkerPage(props: PageProps<"/walk/[token]">) {
   return (
-    <main className="mx-auto max-w-md space-y-6 p-6">
+    <main className="mx-auto w-full max-w-md space-y-6 p-6">
       <h1 className="text-2xl font-semibold">Walk check-in</h1>
       <Suspense fallback={<p>Loading…</p>}>
         <Walk params={props.params} />

@@ -68,9 +68,9 @@ export default function WalkerView({ token, friendId, name, expectedAt, arrivedA
   return (
     <div className="space-y-6">
       {arrived ? (
-        <div className="rounded-2xl border border-green-700 bg-green-600 p-8 text-center text-white">
+        <div className="rounded-2xl border border-status-home-edge bg-status-home p-8 text-center text-white">
           <p className="text-4xl font-bold">You&apos;re home</p>
-          <p className="mt-2 text-sm opacity-80">Your friend can see you&apos;re safe.</p>
+          <p className="mt-2 text-sm">Your friend can see you&apos;re safe.</p>
         </div>
       ) : (
         <>
@@ -81,7 +81,7 @@ export default function WalkerView({ token, friendId, name, expectedAt, arrivedA
           <button
             onClick={imHome}
             disabled={busy}
-            className="w-full rounded-2xl bg-green-600 p-6 text-2xl font-bold text-white disabled:opacity-50"
+            className="w-full rounded-2xl bg-status-home p-6 text-2xl font-bold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground disabled:opacity-50"
           >
             {busy ? "Saving…" : "I'm home"}
           </button>
@@ -94,7 +94,7 @@ export default function WalkerView({ token, friendId, name, expectedAt, arrivedA
         <p className="break-all rounded-lg border border-foreground/20 p-3 text-sm">{friendLink}</p>
         <button
           onClick={copyFriendLink}
-          className="mt-2 w-full rounded-lg border border-foreground/20 p-3 text-sm font-medium"
+          className="mt-2 w-full rounded-lg border border-foreground/20 p-3 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
         >
           {copied ? "Copied!" : "Copy link"}
         </button>

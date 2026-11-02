@@ -45,7 +45,7 @@ export default function StartWalkForm() {
           onChange={(e) => setName(e.target.value)}
           maxLength={50}
           required
-          className="mt-1 w-full rounded-lg border border-foreground/20 bg-background p-3"
+          className="mt-1 w-full rounded-lg border border-foreground/20 bg-background p-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
         />
       </label>
       <label className="block">
@@ -53,7 +53,7 @@ export default function StartWalkForm() {
         <select
           value={minutes}
           onChange={(e) => setMinutes(Number(e.target.value))}
-          className="mt-1 w-full rounded-lg border border-foreground/20 bg-background p-3"
+          className="mt-1 w-full rounded-lg border border-foreground/20 bg-background p-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
         >
           {DURATIONS.map((m) => (
             <option key={m} value={m}>
@@ -66,7 +66,7 @@ export default function StartWalkForm() {
       <button
         type="submit"
         disabled={busy}
-        className="w-full rounded-lg bg-foreground p-3 font-medium text-background disabled:opacity-50"
+        className="w-full rounded-lg bg-foreground p-3 font-medium text-background focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground disabled:opacity-50"
       >
         {busy ? "Starting…" : "Start walk"}
       </button>
