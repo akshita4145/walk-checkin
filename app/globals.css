@@ -8,6 +8,11 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  /* Status cards: white text on these passes WCAG AA (6.4:1 and 4.9:1). */
+  --color-status-overdue: var(--color-red-700);
+  --color-status-overdue-edge: var(--color-red-800);
+  --color-status-home: var(--color-green-700);
+  --color-status-home-edge: var(--color-green-800);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }

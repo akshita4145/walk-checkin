@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import StatusSkeleton from "./status-skeleton";
 
 type WalkInfo = {
   name: string;
@@ -13,8 +14,8 @@ const POLL_MS = 5000;
 
 const LOOK = {
   walking: { label: "Walking", box: "border-foreground/20 bg-foreground/5" },
-  overdue: { label: "Overdue", box: "border-red-700 bg-red-600 text-white" },
-  home: { label: "Home safe", box: "border-green-700 bg-green-600 text-white" },
+  overdue: { label: "Overdue", box: "border-status-overdue-edge bg-status-overdue text-white" },
+  home: { label: "Home safe", box: "border-status-home-edge bg-status-home text-white" },
 } as const;
 
 export default function FriendStatus({ id }: { id: string }) {
@@ -49,7 +50,7 @@ export default function FriendStatus({ id }: { id: string }) {
   }, [id]);
 
   if (notFound) return <p>We couldn&apos;t find that walk. Check the link.</p>;
-  if (!walk) return <p>Loading…</p>;
+  if (!walk) return <StatusSkeleton />;
 
   const look = LOOK[walk.status];
   // Stored in UTC; shown in the viewer's local time.
@@ -57,10 +58,11 @@ export default function FriendStatus({ id }: { id: string }) {
 
   return (
     <div className="space-y-3">
-      <div className={`rounded-2xl border p-8 text-center ${look.box}`}>
-        <p className="text-sm opacity-80">{walk.name}</p>
+      {/* A live region, so a screen reader announces when the status changes. */}
+      <div role="status" aria-atomic="true" className={`rounded-2xl border p-8 text-center ${look.box}`}>
+        <p className="text-xl font-semibold">{walk.name}</p>
         <p className="text-4xl font-bold">{look.label}</p>
-        <p className="mt-2 text-sm opacity-80">Expected home by {due}</p>
+        <p className="mt-2 text-sm">Expected home by {due}</p>
       </div>
       {offline && <p className="text-sm text-foreground/60">Can&apos;t reach the server. Showing the last known status.</p>}
     </div>
