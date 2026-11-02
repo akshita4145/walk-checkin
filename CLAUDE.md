@@ -6,7 +6,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Status
 
-Freshly scaffolded `create-next-app` project (single commit). `app/page.tsx` and the `metadata` in `app/layout.tsx` are still template placeholders — the actual walk check-in app has not been built yet.
+The walk check-in app is built end to end and deployed (production alias: `https://walk-checkin.vercel.app`; per-deployment `*.vercel.app` URLs sit behind Vercel Authentication, so verify on the alias).
+
+- Pages: `/` (start-walk form), `/walk/[token]` (walker's "I'm home" page), `/f/[id]` (friend page, polls every 5s).
+- API routes: `POST /api/walks`, `GET /api/walks/[id]` (public status, never returns the walker token), `POST /api/walks/arrive`.
+- Database: one Neon Postgres table, `walks` (`db/schema.sql`), accessed through `lib/db.ts`.
+- `lib/status.ts` holds `getStatus` (home → overdue → walking), computed on request using the database's `now()`; nothing is stored as "overdue".
+- `proxy.ts` checks that a walk exists before `/walk/[token]` and `/f/[id]` render, so unknown links get a real 404 (the pages stream behind `<Suspense>`, which would otherwise send 200).
 
 ## Commands
 
@@ -37,7 +43,8 @@ Next.js 16.4 (App Router), React 19.3, TypeScript (strict), Tailwind CSS v4. The
 
 - Path alias `@/*` maps to the repo root.
 - Layouts/pages use Next's global typed route helpers (e.g. `LayoutProps<"/">` in `app/layout.tsx`) rather than hand-written props types.
-- Deployed on Vercel (`.vercel/` is linked); `.env.local` was created by the Vercel CLI (`vercel env pull`).
+- Deployed on Vercel (`.vercel/` is linked); pushing to `main` auto-deploys to production.
+- `.env.local` was created by the Vercel CLI, but the Neon vars are Secret type, so `vercel env pull` only writes `"[SENSITIVE]"` placeholders for them. `DATABASE_URL` in `.env.local` is pasted in by hand from the Neon dashboard (pooled connection string). Never print it.
 
 # Project scope
 @SCOPE.md
@@ -46,5 +53,5 @@ Next.js 16.4 (App Router), React 19.3, TypeScript (strict), Tailwind CSS v4. The
 - I'm learning this stack. Small steps, one feature at a time.
 - Explain the plan in plain English before writing code.
 - No new dependencies without asking.
-- API routes that touch the database use runtime = "nodejs".
+- API routes that touch the database run on the Node.js runtime (never Edge). With Cache Components this is the default, and the docs say not to export `runtime` at all (including `runtime = "nodejs"`), so leave the export out.
 - Store all times in UTC; convert to local time only for display.
