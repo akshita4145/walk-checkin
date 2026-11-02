@@ -27,7 +27,6 @@ export async function GET(_request: Request, ctx: RouteContext<"/api/walks/[id]"
     {
       name: row.name,
       expectedAt: expectedAt.toISOString(),
-      arrivedAt: arrivedAt ? arrivedAt.toISOString() : null,
       status,
     },
     { headers: { "Cache-Control": "no-store" } },

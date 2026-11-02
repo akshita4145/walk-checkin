@@ -6,7 +6,6 @@ import StatusSkeleton from "./status-skeleton";
 type WalkInfo = {
   name: string;
   expectedAt: string;
-  arrivedAt: string | null;
   status: "walking" | "overdue" | "home";
 };
 
